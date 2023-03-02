@@ -1,0 +1,46 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended",
+    "plugin:react-hooks/recommended",
+    "prettier",
+    "google"
+  ],
+  "overrides": [],
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "plugins": ["react", "react-hooks", "prettier"],
+  "rules": {
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/jsx-filename-extension": "off",
+    "react/jsx-curly-brace-presence": "off",
+    "react/no-unescaped-entities": "off",
+    "react/no-unknown-property": ["error", { "ignore": ["css"] }],
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "warn",
+    "no-use-before-define": "off",
+    "prettier/prettier": "warn",
+    "arrow-body-style": "off",
+    "prefer-arrow-callback": "off",
+    "require-jsdoc": 0,
+    "semi": ["error", "never"],
+    "indent": ["error", 2],
+    "comma-dangle": ["error", "never"],
+    "object-curly-spacing": ["error", "always", { "arraysInObjects": false }],
+    "arrow-parens": ["error", "as-needed"]
+  }
+}
