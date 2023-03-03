@@ -1,7 +1,52 @@
+import { lazy } from 'react'
+import { useRoutes } from 'react-router-dom'
 import './App.css'
+import 'bootstrap/dist/css/bootstrap.min.css'
+import MainLayout from './app/components/MainLayout'
+import { Suspense } from 'react'
+import Loading from './app/components/Loading'
+
+const Home = lazy(() => wait(1000).then(() => import('./app/pages/Home')))
+const Blog = lazy(() => wait(1000).then(() => import('./app/pages/Blog')))
+const CreateBlog = lazy(() =>
+  wait(1000).then(() => import('./app/pages/CreateBlog'))
+)
+const NotFound = lazy(() =>
+  wait(1000).then(() => import('./app/pages/NotFound'))
+)
 
 function App() {
-  return <></>
+  const elements = useRoutes([
+    {
+      path: '/',
+      element: <Home />
+    },
+    {
+      path: '/create',
+      element: <CreateBlog />
+    },
+    {
+      path: '/:blogId',
+      element: <Blog />
+    },
+    {
+      path: '*',
+      element: <NotFound />
+    }
+  ])
+  return (
+    <>
+      <MainLayout>
+        <Suspense fallback={<Loading />}>{elements}</Suspense>
+      </MainLayout>
+    </>
+  )
 }
 
 export default App
+
+const wait = time => {
+  return new Promise(resolve => {
+    setTimeout(resolve, time)
+  })
+}
