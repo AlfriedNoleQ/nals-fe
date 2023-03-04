@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 
 import ListBlog from '../components/ListBlog'
 import Pagination from '../components/Pagination'
-// import qs from 'query-string'
 import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
@@ -18,7 +17,6 @@ import { debounce } from 'lodash'
 import Skeleton from 'react-loading-skeleton'
 
 const Home = () => {
-  // const [data, setData] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
   const [blogsPerPage] = useState(10)
   const [keyword, setKeyword] = useState('')
@@ -43,25 +41,6 @@ const Home = () => {
   useEffect(() => {
     dispatch(getBlogsApi(filters))
   }, [dispatch, filters])
-
-  /*
-   ** Using fetch handle call api
-   */
-
-  // const getData = useCallback(async () => {
-  //   const result = await fetch(
-  //     `https://5f55a98f39221c00167fb11a.mockapi.io/blogs?${qs.stringify(
-  //       filters
-  //     )}`
-  //   )
-  //   if (!result.ok) throw new Error('something wrongs!')
-  //   const data = await result.json()
-  //   setData(data)
-  // }, [filters])
-
-  // useEffect(() => {
-  //   getData()
-  // }, [getData])
 
   const lastPostIndex = currentPage * blogsPerPage
   const firstPostIndex = lastPostIndex - blogsPerPage
