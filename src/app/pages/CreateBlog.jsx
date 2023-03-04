@@ -65,6 +65,9 @@ const CreateBlog = () => {
         try {
           fetch(`https://5f55a98f39221c00167fb11a.mockapi.io/blogs`, {
             method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
             body: JSON.stringify(newData)
           })
         } catch (error) {
@@ -76,7 +79,10 @@ const CreateBlog = () => {
           fetch(
             `https://5f55a98f39221c00167fb11a.mockapi.io/blogs/${data?.id}`,
             {
-              method: 'POST',
+              method: 'PUT',
+              headers: {
+                'Content-Type': 'application/json'
+              },
               body: JSON.stringify(value)
             }
           )
