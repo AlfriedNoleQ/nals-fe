@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 
 import ListBlog from '../components/ListBlog'
 import Pagination from '../components/Pagination'
@@ -7,9 +7,15 @@ import Container from 'react-bootstrap/Container'
 import Row from 'react-bootstrap/Row'
 import Col from 'react-bootstrap/Col'
 import Form from 'react-bootstrap/Form'
-import { FcGenericSortingAsc, FcGenericSortingDesc } from 'react-icons/fc'
+import { AiOutlineArrowUp, AiOutlineArrowDown } from 'react-icons/ai'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectBlogs, getBlogsApi } from '../../store/slice/blog'
+import {
+  selectBlogs,
+  getBlogsApi,
+  selectBlogsLoading
+} from '../../store/slice/blog'
+import { debounce } from 'lodash'
+import Skeleton from 'react-loading-skeleton'
 
 const Home = () => {
   // const [data, setData] = useState([])
@@ -22,6 +28,13 @@ const Home = () => {
   })
   const dispatch = useDispatch()
   const selectData = useSelector(selectBlogs)
+  const loading = useSelector(selectBlogsLoading)
+
+  const arrLoading = [...Array(10)].map((_, i) => (
+    <div className={`mt-2 mb-2 rounded`} key={i}>
+      <Skeleton height={100} />
+    </div>
+  ))
 
   /*
    ** Using redux thunk and redux toolkit handle call api
@@ -54,6 +67,12 @@ const Home = () => {
   const firstPostIndex = lastPostIndex - blogsPerPage
   const currentBlogs = selectData.slice(firstPostIndex, lastPostIndex)
 
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const debounceFunc = useCallback(
+    debounce(value => setFilters(value), 500),
+    []
+  )
+
   const onSearch = e => {
     const { value } = e.target
     setKeyword(value)
@@ -61,7 +80,8 @@ const Home = () => {
       ...filters,
       search: value.trim()
     }
-    setFilters(newFilters)
+    // using debounce for searching
+    debounceFunc(newFilters)
   }
 
   const onSort = sort => {
@@ -69,7 +89,8 @@ const Home = () => {
       ...filters,
       sortBy: sort
     }
-    setFilters(newFilters)
+    // using debounce for sorting
+    debounceFunc(newFilters)
   }
 
   return (
@@ -89,17 +110,29 @@ const Home = () => {
       </Row>
 
       <div className="d-flex justify-content-end">
-        <div className="up" onClick={() => onSort('id')}>
-          <FcGenericSortingDesc />
+        <div
+          style={{ cursor: 'pointer' }}
+          className="up text-primary p-2"
+          onClick={() => onSort('id')}>
+          <AiOutlineArrowUp />
+          id
         </div>
-        <div className="down" onClick={() => onSort('createdAt')}>
-          <FcGenericSortingAsc />
+        <div
+          style={{ cursor: 'pointer' }}
+          className="down text-info p-2"
+          onClick={() => onSort('createdAt')}>
+          <AiOutlineArrowDown />
+          created At
         </div>
       </div>
 
       <Row>
         <Col>
-          <ListBlog list={currentBlogs} />
+          {loading ? (
+            <ul className="list-unstyled">{arrLoading}</ul>
+          ) : (
+            <ListBlog list={currentBlogs} />
+          )}
         </Col>
       </Row>
       <Row>

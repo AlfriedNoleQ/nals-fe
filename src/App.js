@@ -1,10 +1,12 @@
 import { lazy } from 'react'
 import { useRoutes } from 'react-router-dom'
 import './App.css'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import MainLayout from './app/components/MainLayout'
 import { Suspense } from 'react'
-import Loading from './app/components/Loading'
+import { wait } from './ultis'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const Home = lazy(() => wait(1000).then(() => import('./app/pages/Home')))
 const Blog = lazy(() => wait(1000).then(() => import('./app/pages/Blog')))
@@ -30,6 +32,10 @@ function App() {
       element: <Blog />
     },
     {
+      path: '/edit/:blogId',
+      element: <CreateBlog />
+    },
+    {
       path: '*',
       element: <NotFound />
     }
@@ -37,7 +43,7 @@ function App() {
   return (
     <>
       <MainLayout>
-        <Suspense fallback={<Loading />}>{elements}</Suspense>
+        <Suspense>{elements}</Suspense>
       </MainLayout>
     </>
   )
@@ -45,8 +51,8 @@ function App() {
 
 export default App
 
-const wait = time => {
-  return new Promise(resolve => {
-    setTimeout(resolve, time)
-  })
-}
+// const wait = time => {
+//   return new Promise(resolve => {
+//     setTimeout(resolve, time)
+//   })
+// }
